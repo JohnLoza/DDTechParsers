@@ -344,7 +344,8 @@
 
             const attrs = Object.getOwnPropertyNames(obj);
             attrs.forEach(attr => {
-                obj[attr] = obj[attr].replace(/[\.+,"'|()°\/\\]/g, '');
+                if (attr != 'email')
+                    obj[attr] = obj[attr].replace(/[:\.+,"'|()°\/\\]/g, '');
                 obj[attr] = obj[attr].trim();
             });
 
