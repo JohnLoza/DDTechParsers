@@ -342,6 +342,12 @@
                 obj[attr] = attr == 'email' ? obj[attr].toLowerCase() : obj[attr].toUpperCase();
             });
 
+            const attrs = Object.getOwnPropertyNames(obj);
+            attrs.forEach(attr => {
+                obj[attr] = obj[attr].replace(/[\.+,"'|()°\/\\]/g, '');
+                obj[attr] = obj[attr].trim();
+            });
+
             if (!obj.businessName)
                 obj.businessName = obj.client; // Set businessName if not present
 
@@ -349,7 +355,7 @@
                 obj.client = obj.client.substring(0, 29); // Cut down the name to 30 chars
 
             if (obj.number) {
-                if (['S/N', 'SN'].includes(obj.number)) {
+                if (obj.number = 'SN') {
                     obj.number = '';
                 } else if (Number(obj.number[0])) {
                     obj.number = `#${obj.number}`;
@@ -358,9 +364,9 @@
             obj.street += ` ${obj.number}`;
 
             if (obj.street.length > 30) {
-                let cutTo = 29;
-                if (obj.street[28] != ' ' && obj.street[29] != ' ' && obj.street[30] != ' ') {
-                    cutTo = 27;
+                let cutTo = 30;
+                if (obj.street[29] != ' ' && obj.street[30] != ' ') {
+                    cutTo = 28;
                     while (obj.street[cutTo] != ' ')
                         cutTo -= 1;
                 }
@@ -368,12 +374,6 @@
                 obj.street2 = obj.street.substring(cutTo, 999); // Complete street #2 with chars beyond limit in street #1
                 obj.street = obj.street.substring(0, cutTo); // Limit street #1 chars to no more than 30 chars
             }
-
-            const attrs = Object.getOwnPropertyNames(obj);
-            attrs.forEach(attr => {
-                obj[attr] = obj[attr].replace(/[+,"'|()°]/g, '');
-                obj[attr] = obj[attr].trim();
-            });
 
             return obj;
         }
