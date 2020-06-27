@@ -355,7 +355,7 @@
                 obj.client = obj.client.substring(0, 29); // Cut down the name to 30 chars
 
             if (obj.number) {
-                if (obj.number = 'SN') {
+                if (obj.number == 'SN') {
                     obj.number = '';
                 } else if (Number(obj.number[0])) {
                     obj.number = `#${obj.number}`;
