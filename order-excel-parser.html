@@ -422,8 +422,7 @@
         }
 
         function updateCurrentOrderAttr(input, attr) {
-            input.value = input.value.toUpperCase();
-            currentOrder[attr] = input.value;
+            currentOrder[attr] = input.value.toUpperCase();
             $(`.order-${attr}-preview`).html(currentOrder[attr]);
 
             validateData(currentOrder);

@@ -447,8 +447,7 @@
         }
 
         function updateCurrentAddressAttr(input, attr) {
-            input.value = input.value.toUpperCase();
-            currentAddress[attr] = input.value;
+            currentAddress[attr] = input.value.toUpperCase();
             $(`.address-${attr}-preview`).html(currentAddress[attr]);
 
             validateData(currentAddress);
