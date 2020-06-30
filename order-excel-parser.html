@@ -26,6 +26,19 @@
             border: 1px solid #fefefe;
             border-radius: 5px;
         }
+        .order-total-preview {
+            background-color: green;
+            color: #fefefe;
+            padding: 0.3em;
+        }
+        .order-parcel-preview {
+            color: #fefefe;
+            padding: 0.3em;
+        }
+        .order-parcel-preview.estafeta { background-color: #e53935; }
+        .order-parcel-preview.fedex { background-color: #3949ab; }
+        .order-parcel-preview.zmg { background-color: #7cb342; }
+        .order-parcel-preview.dhl { background-color: #fdd835; }
     </style>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -234,15 +247,15 @@
                 orderId: '',
                 client: '',
                 email: '',
+                destination: '',
+                total: '',
                 parcel: '',
                 insuranceCost: '',
-                total: '',
                 invoice: '',
-                destination: '',
                 processor: '',
-                paymentType: '',
                 date: '',
                 bank: '',
+                paymentType: '',
                 movement: '',
                 type: '',
                 guide: ''
@@ -331,7 +344,7 @@
             });
 
             if (obj.parcel.includes('GUADALAJARA'))
-                obj.parcel = 'ZMG';
+                obj.parcel = obj.destination.includes('JALISCO') ? 'ZMG' : 'ESTAFETA';
             else if (obj.parcel.includes('GRATIS'))
                 obj.parcel = 'ESTAFETA';
             else if (obj.parcel.includes('AÉREO'))
@@ -424,7 +437,10 @@
                 <h5><strong>Información de la órden</strong></h5>
             `;
 
+            let extraSpace = '';
             Object.getOwnPropertyNames(currentOrder).forEach(attr => {
+                extraSpace = ['destination', 'total', 'invoice'].includes(attr) ? '<br>' : '';
+
                 preview += `
                     <div>
                         <strong class="preview-label" onclick="editCurrentOrderAttr('${attr}')">
@@ -435,11 +451,19 @@
                             ${currentOrder[attr]}
                         </span><br>
                         <span class="order-${attr}-edit-box"></span>
+                        ${extraSpace}
                     </div>
                 `;
             });
 
             previewHolder.html(preview);
+
+            $('.order-parcel-preview').removeClass('estafeta');
+            $('.order-parcel-preview').removeClass('fedex');
+            $('.order-parcel-preview').removeClass('zmg');
+            $('.order-parcel-preview').removeClass('dhl');
+
+            $('.order-parcel-preview').addClass(currentOrder.parcel.toLowerCase());
 
             validateData(currentOrder);
         }
@@ -531,7 +555,7 @@
                         <div class="form-group">
                             <label for="processor" class="sr-only">Procesó</label>
                             <input type="text" list="processors" name="processor" id="processor" class="form-control"
-                                onkeyup="updatePreview()" onchange="updatePreview()" placeholder="* Procesó">
+                                onkeyup="updateCurrentOrderAttr(this, 'processor')" placeholder="* Procesó">
                             <datalist id="processors">
                                 <option value="ADRIAN"/>
                                 <option value="ALEXIS"/>
@@ -560,13 +584,13 @@
                         <div class="form-group">
                             <label for="date" class="sr-only">Fecha</label>
                             <input type="text" name="date" id="date" class="form-control"
-                                onkeyup="updatePreview()" onchange="updatePreview()" placeholder="* Fecha">
+                                onkeyup="updateCurrentOrderAttr(this, 'date')" placeholder="* Fecha">
                         </div>
 
                         <div class="form-group">
                             <label for="bank" class="sr-only">Banco</label>
                             <input type="text" list="banks" name="bank" id="bank" class="form-control"
-                                onkeyup="updatePreview()" onchange="updatePreview()" placeholder="* Banco">
+                                onkeyup="updateCurrentOrderAttr(this, 'bank')" placeholder="* Banco">
                             <datalist id="banks">
                                 <option value="BC"/>
                                 <option value="BCE"/>
@@ -583,7 +607,7 @@
                         <div class="form-group">
                             <label for="payment_type" class="sr-only">Forma de pago</label>
                             <input type="text" list="payment_types" name="payment_type" id="payment_type" class="form-control"
-                                onkeyup="updatePreview()" onchange="updatePreview()" placeholder="Forma de pago (opcional)">
+                                onkeyup="updateCurrentOrderAttr(this, 'payment_type')" placeholder="Forma de pago (opcional)">
                             <datalist id="payment_types">
                                 <option value="DEP EFEC"/>
                                 <option value="PAG OF"/>
@@ -595,13 +619,13 @@
                         <div class="form-group">
                             <label for="movement" class="sr-only">Movimiento</label>
                             <input type="text" name="movement" id="movement" class="form-control"
-                                onkeyup="updatePreview()" onchange="updatePreview()" placeholder="Movimiento (opcional)">
+                                onkeyup="updateCurrentOrderAttr(this, 'movement')" placeholder="Movimiento (opcional)">
                         </div>
 
                         <div class="form-group">
                             <label for="type" class="sr-only">Tipo</label>
                             <input type="text" list="types" name="type" id="type" class="form-control"
-                                onkeyup="updatePreview()" onchange="updatePreview()" placeholder="Tipo (opcional)">
+                                onkeyup="updateCurrentOrderAttr(this, 'type')" placeholder="Tipo (opcional)">
                             <datalist id="types">
                                 <option value="D/S"/>
                                 <option value="30K"/>
@@ -614,7 +638,7 @@
                         <div class="form-group">
                             <label for="guide" class="sr-only">Guía</label>
                             <input type="text" name="guide" id="guide" class="form-control"
-                                onkeyup="updatePreview()" onchange="updatePreview()" placeholder="Guía (opcional)">
+                                onkeyup="updateCurrentOrderAttr(this, 'guide')" placeholder="Guía (opcional)">
                         </div>
                     </section>
 
