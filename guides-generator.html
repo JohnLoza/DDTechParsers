@@ -45,6 +45,18 @@
 
         $(document).ready(function() {
             $('#dest_short_name').focus();
+
+            if (!window.localStorage.getItem('guides'))
+                window.localStorage.setItem('guides', JSON.stringify({}))
+
+            guides = JSON.parse(window.localStorage.getItem('guides'));
+            updateGuidesCount()
+
+            Object.getOwnPropertyNames(guides).forEach(guideKey => {
+                $('.guides-container').append(
+                    guideToHtml(guides[guideKey], guideKey)
+                );
+            });
         });
 
         function addGuide() {
@@ -57,6 +69,7 @@
 
             const id = generateHashId();
             guides[id] = guide;
+            updateLocalStorageGuides();
 
             $('.guides-container').append(guideToHtml(guide, id));
 
@@ -114,7 +127,7 @@
 
         function cleanFields() {
             $('#dest_short_name').val('');
-            $('#weight').val();
+            $('#weight').val('');
             $('#declared_value').val('');
             $('#insurance_description').val('');
             $('#aerial').prop('checked', false);
@@ -124,6 +137,7 @@
 
         function cleanGuides() {
             guides = {};
+            updateLocalStorageGuides();
             $('.guides-container').html('');
             updateGuidesCount();
         }
@@ -202,6 +216,8 @@
             lastGuideRemoved = guides[guideKey];
 
             delete guides[guideKey];
+            updateLocalStorageGuides();
+
             $('.guide-' + guideKey).remove();
             updateGuidesCount();
 
@@ -233,6 +249,10 @@
             };
 
             currentGuide['insurance'] = currentGuide['declaredValue'] ? 'V' : 'F';
+        }
+
+        function updateLocalStorageGuides() {
+            window.localStorage.setItem('guides', JSON.stringify(guides));
         }
 
         function updateGuidesCount() {
@@ -380,7 +400,7 @@
 
             <div class="card-body">
                 <div class="text-center">
-                    <button class="btn btn-danger mb-3" onclick="">
+                    <button class="btn btn-danger mb-3" onclick="cleanAll()">
                         Limpiar guías
                     </button>
                 </div>

@@ -58,6 +58,18 @@
 
         $(document).ready(function() {
             $('#gmail_order').focus();
+
+            if (!window.localStorage.getItem('orders'))
+                window.localStorage.setItem('orders', JSON.stringify({}))
+
+            orders = JSON.parse(window.localStorage.getItem('orders'));
+            updateOrdersCount();
+
+            Object.getOwnPropertyNames(orders).forEach(orderKey => {
+                $('.orders-container').append(
+                    orderToHtml(orders[orderKey], orderKey)
+                );
+            });
         });
 
         function addOrder() {
@@ -73,6 +85,7 @@
 
             const orderKey = generateHashId();
             orders[orderKey] = currentOrder;
+            updateLocalStorageOrders();
 
             $('.orders-container').append(orderToHtml(currentOrder, orderKey));
 
@@ -126,6 +139,7 @@
 
         function cleanOrders() {
             orders = {};
+            updateLocalStorageOrders();
             $('.orders-container').html('');
             updateOrdersCount();
         }
@@ -291,7 +305,8 @@
                 <p class="order-${orderKey} border rounded p-2">
                     <i class="fa fas fa-times fa-lg mr-5 btn btn-danger remove-item"
                         onclick="removeOrder('${orderKey}')"></i>
-                    <strong>${order.orderId}</strong> | ${order.client}
+                    <strong>${order.orderId}</strong> | ${order.client} |
+                    ${order.processor} | ${order.date} | ${order.bank}
                 </p>
             `;
         }
@@ -377,6 +392,8 @@
             lastOrderRemoved = orders[orderKey];
 
             delete orders[orderKey];
+            updateLocalStorageOrders();
+
             $('.order-' + orderKey).remove();
             updateOrdersCount();
 
@@ -426,6 +443,10 @@
             $(`.order-${attr}-preview`).html(currentOrder[attr]);
 
             validateData(currentOrder);
+        }
+
+        function updateLocalStorageOrders() {
+            window.localStorage.setItem('orders', JSON.stringify(orders));
         }
 
         function updatePreview() {

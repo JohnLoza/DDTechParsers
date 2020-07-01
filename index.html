@@ -49,6 +49,18 @@
 
         $(document).ready(function() {
             $('#short_name').focus();
+
+            if (!window.localStorage.getItem('addresses'))
+                window.localStorage.setItem('addresses', JSON.stringify({}))
+
+            addresses = JSON.parse(window.localStorage.getItem('addresses'));
+            updateAddressesCount();
+
+            Object.getOwnPropertyNames(addresses).forEach(addressKey => {
+                $('.addresses-container').append(
+                    addressToHtml(addresses[addressKey], addressKey)
+                );
+            });
         });
 
         function addAddress() {
@@ -64,6 +76,7 @@
 
             const addressKey = generateHashId();
             addresses[addressKey] = currentAddress;
+            updateLocalStorageAddresses();
 
             $('.addresses-container').append(addressToHtml(currentAddress, addressKey));
 
@@ -161,6 +174,7 @@
 
         function cleanAddresses() {
             addresses = {};
+            updateLocalStorageAddresses();
             $('.addresses-container').html('');
             updateAddressesCount();
         }
@@ -404,6 +418,8 @@
             lastAddressRemoved = addresses[addressKey];
 
             delete addresses[addressKey];
+            updateLocalStorageAddresses();
+
             $('.address-' + addressKey).remove();
             updateAddressesCount();
 
@@ -451,6 +467,10 @@
             $(`.address-${attr}-preview`).html(currentAddress[attr]);
 
             validateData(currentAddress);
+        }
+
+        function updateLocalStorageAddresses() {
+            window.localStorage.setItem('addresses', JSON.stringify(addresses));
         }
 
         function updatePreview() {
