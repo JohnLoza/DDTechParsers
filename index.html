@@ -99,13 +99,7 @@
             if (!addressData)
                 return obj; // return now if there is no more data to process
 
-            const addressT = addressType(addressData);
-            if (addressT == 'PayPal') {
-                obj = completeObjFromPayPalAddress(obj, addressData);
-            } else if (addressT == 'Gmail') {
-                obj = completeObjFromGmailAddress(obj, addressData);
-            }
-
+            obj = completeObjFromGmailAddress(obj, addressData);
             obj = refineAddressData(obj);
 
             return obj;
@@ -125,16 +119,6 @@
             let addressInTextFormat = `${address.shortName}|Ventas|${address.client}|${address.email}||mx|${address.businessName}|${address.street}|${address.street2}|${address.colony}|${address.zc}|${address.tel1}|${address.tel2}|${address.state}|${address.city}`;
 
             return addressInTextFormat;
-        }
-
-        function addressType(addressData) {
-            if (addressData.includes('Comprador') && addressData.includes('Instrucciones para el comercio')) {
-                return 'PayPal';
-            } else if (addressData.includes('Información de venta') && addressData.includes('Tipo de envío')) {
-                return 'Gmail';
-            } else {
-                return 'Unknown';
-            }
         }
 
         function bootstrapAlert(args = {}) {
@@ -204,6 +188,9 @@
         }
 
         function completeObjFromGmailAddress(obj, addressData) {
+            if (!obj.shortName)
+                obj.shortName = addressData.match(/#[\d]+/g)[0].replace('#', '');
+
             obj.client = addressData.match(/Cliente(.)+\n/g)[0].replace('Cliente ', '').replace('\n', '');
             obj.email = addressData.match(/Email(.)+\n/g)[0].replace('Email ', '').replace('\n', '');
 
@@ -221,32 +208,6 @@
             obj.number = lastMatch(addressData, /Número(.)+\n/g).replace('Número ', '').replace('\n', '');
 
             obj.street = lastMatch(addressData, /Calle(.)+\n/g).replace('Calle ', '').replace('\n', '');
-
-            return obj;
-        }
-
-        function completeObjFromPayPalAddress(obj, addressData) {
-            let clientDataStartIndex;
-            const addressDataArray = addressData.split('\n');
-            addressDataArray.forEach((element, indx, array) => {
-                if (element.match(/(.)+@(.)+\.(.)+/))
-                    obj.email = element;
-                if (element.includes('Dirección de envío'))
-                    clientDataStartIndex = indx;
-            });
-
-            obj.tel1 = '';
-            obj.tel2 = '';
-            obj.number = '';
-
-            obj.client = addressDataArray[clientDataStartIndex + 1];
-            obj.street = addressDataArray[clientDataStartIndex + 2];
-            obj.colony = addressDataArray[clientDataStartIndex + 3];
-
-            let cityStateZc = addressDataArray[clientDataStartIndex + 4].split(',');
-            obj.city = cityStateZc[0];
-            obj.state = cityStateZc[1].split(' ')[1];
-            obj.zc = cityStateZc[1].split(' ')[2];
 
             return obj;
         }
@@ -601,15 +562,15 @@
                         </div>
 
                         <div class="from-group">
-                            <label for="short_name">Nombre corto</label>
+                            <label for="short_name">Nombre corto (Opcional)</label>
                             <input type="text" name="short_name" id="short_name" class="form-control" maxlength="8"
-                                onchange="updatePreview()">
+                                onchange="updatePreview()" placeholder="Nombre corto 334518">
                         </div>
 
                         <div class="form-group">
-                            <label for="gmail_address">Domicilio Gmail / PayPal</label>
+                            <label for="gmail_address">Domicilio Gmail</label>
                             <textarea name="gmail_address" id="gmail_address" cols="30" rows="10" class="form-control"
-                                onchange="updatePreview()"></textarea>
+                                onchange="updatePreview()" placeholder="* Domicilio Gmail ---"></textarea>
                         </div>
                     </section>
 
