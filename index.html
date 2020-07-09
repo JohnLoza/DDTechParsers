@@ -116,7 +116,7 @@
         }
 
         function addressToText(address) {
-            let addressInTextFormat = `${address.shortName}|Ventas|${address.client}|${address.email}||mx|${address.businessName}|${address.street}|${address.street2}|${address.colony}|${address.zc}|${address.tel1}|${address.tel2}|${address.state}|${address.city}`;
+            let addressInTextFormat = `${address.shortName}|Ventas|${address.client}|${address.email}||mx|${address.businessName}|${address.street}|${address.street2}|${address.colony}|${address.zc}|${address.tel1}|${address.tel2}|${address.state}|${address.city}\n`;
 
             return addressInTextFormat;
         }
@@ -176,6 +176,7 @@
 
             currentAddress = {};
             $('.address-preview').html('');
+            $('#short_name').focus();
         }
 
         function closeEditBox(attr, event = null) {
@@ -296,20 +297,19 @@
             processedAddresses = '';
             $('.processed-addresses').html(processedAddresses);
 
-            addressKeys.forEach((addressKey, indx, array) => {
+            addressKeys.forEach(addressKey => {
                 processedAddresses += addressToText(addresses[addressKey]);
                 $('.processed-addresses').append(`<p>${addressToText(addresses[addressKey])}</p>`);
-                if (indx < array.length - 1) // Don't add a new line if it's the last one
-                    processedAddresses += '\n';
             });
-            $('#ddtech-modal').modal('show');
-            $('.copy-format').focus();
 
             if ($('#clean_addresses_when_processed').is(':checked')) {
                 cleanAll();
             } else {
                 cleanFields();
             }
+
+            $('#ddtech-modal').modal('show');
+            $('.copy-format').focus();
         }
 
         function refineAddressData(obj) {
@@ -629,7 +629,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary copy-format" data-dismiss="modal"
-                            onclick="copyToClipboard(processedAddresses);">
+                            onclick="copyToClipboard(processedAddresses); $('#short_name').focus();">
                             Copear y cerrar
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
