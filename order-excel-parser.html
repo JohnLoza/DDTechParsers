@@ -360,10 +360,8 @@
 
             if (obj.parcel.includes('GUADALAJARA'))
                 obj.parcel = obj.destination.includes('JALISCO') ? 'ZMG' : 'ESTAFETA';
-            else if (obj.parcel.includes('GRATIS'))
+            else if (obj.parcel.includes('GRATIS') || obj.parcel.includes('AÉREO'))
                 obj.parcel = 'ESTAFETA';
-            else if (obj.parcel.includes('AÉREO'))
-                obj.parcel = 'ESTAFETA AEREO';
 
             return obj;
         }
