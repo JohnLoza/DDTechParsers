@@ -161,6 +161,8 @@
 
             currentOrder = newOrderObject();
             $('.order-preview').html('');
+
+            $('#gmail_order').focus();
         }
 
         function closeEditBox(attr, event = null) {
@@ -347,10 +349,11 @@
             orderKeys.forEach((orderKey, indx, array) => {
                 $('#processed_orders').append(orderToTableRow(orders[orderKey]));
             });
-            $('#ddtech-modal').modal('show');
-            $('.copy-format').focus();
 
             cleanAll();
+
+            $('#ddtech-modal').modal('show');
+            $('.copy-format').focus();
         }
 
         function refineOrderData(obj){
@@ -738,7 +741,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary copy-format" data-dismiss="modal"
-                            onclick="copyElementContents('processed_orders');">
+                            onclick="copyElementContents('processed_orders'); $('#gmail_order').focus();">
                             Copear y cerrar
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
