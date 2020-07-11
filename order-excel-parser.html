@@ -32,6 +32,7 @@
             padding: 0.3em;
         }
         .order-parcel-preview {
+            background-color: #666;
             color: #fefefe;
             padding: 0.3em;
         }
@@ -442,6 +443,15 @@
         function updateCurrentOrderAttr(input, attr) {
             currentOrder[attr] = input.value.toUpperCase();
             $(`.order-${attr}-preview`).html(currentOrder[attr]);
+
+            if (attr == "parcel") {
+                $('.order-parcel-preview').removeClass('estafeta');
+                $('.order-parcel-preview').removeClass('fedex');
+                $('.order-parcel-preview').removeClass('zmg');
+                $('.order-parcel-preview').removeClass('dhl');
+
+                $('.order-parcel-preview').addClass(currentOrder.parcel.toLowerCase());
+            }
 
             validateData(currentOrder);
         }
