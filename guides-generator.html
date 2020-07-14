@@ -180,8 +180,7 @@
         }
 
         function guideToText(guide) {
-            const serviceCode = guide.aerial ? 68 : 78;
-            const guideInTextFormat = `${serviceCode}|${guide.weight}.0|P||${guide.declaredValue}|${guide.insurance}|ACCESORIOS DE COMPUTO|${guide.insuranceDescription}|ACCESORIOS||DDTECH|${guide.destShortName}|NOR||||1`;
+            const guideInTextFormat = `${guide.serviceCode}|${guide.weight}.0|P||${guide.declaredValue}|${guide.insurance}|ACCESORIOS DE COMPUTO|${guide.insuranceDescription}|ACCESORIOS||DDTECH|${guide.destShortName}|NOR||||1`;
 
             return guideInTextFormat;
         }
@@ -241,11 +240,11 @@
 
         function updateCurrentGuide() {
             currentGuide = {
+                serviceCode: $('#service_code').val(),
                 destShortName: $('#dest_short_name').val(),
                 weight: $('#weight').val(),
                 declaredValue: $('#declared_value').val(),
-                insuranceDescription: $('#insurance_description').val(),
-                aerial: $('#aerial').is(':checked')
+                insuranceDescription: $('#insurance_description').val()
             };
 
             currentGuide['insurance'] = currentGuide['declaredValue'] ? 'V' : 'F';
@@ -343,6 +342,17 @@
                 <div class="row">
                     <section class="col-lg-6 col-md-12">
                         <div class="form-group mb-2">
+                            <label for="service_code">Código de servicio</label>
+                            <select name="service_code" id="service_code" class="form-control"
+                                onchange="updateCurrentGuide()">
+                                <option value="70">Por Consumo</option>
+                                <option value="78">Prepagado</option>
+                                <option value="60">Aéreo Consumo</option>
+                                <option value="68">Aéreo Prepagado</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-2">
                             <label for="declared_value">Valor declarado (opcional solo para asegurar)</label>
                             <input type="number" name="declared_value" id="declared_value" class="form-control"
                                 min="1" onchange="updateCurrentGuide()">
@@ -364,11 +374,6 @@
                             <label for="weight">Peso</label>
                             <input type="number" name="weight" id="weight" class="form-control"
                                 min="1" max="99" step="1" onchange="updateCurrentGuide()">
-                        </div>
-
-                        <div class="form-group mb-2">
-                            <label for="aerial">Aéreo prepagado</label>
-                            <input type="checkbox" name="aerial" id="aerial" onchange="updateCurrentGuide()">
                         </div>
                     </section>
 
