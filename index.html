@@ -48,7 +48,7 @@
         let lastAddressRemoved = null;
 
         $(document).ready(function() {
-            $('#short_name').focus();
+            $('#gmail_address').focus();
 
             if (!window.localStorage.getItem('addresses'))
                 window.localStorage.setItem('addresses', JSON.stringify({}))
@@ -87,7 +87,7 @@
             bootstrapAlert({ msg: msg, icon: 'flag', type: 'success' });
             cleanFields();
             updateAddressesCount();
-            $('#short_name').focus();
+            $('#gmail_address').focus();
 
             if (Object.getOwnPropertyNames(addresses).length == 10)
                 processAddresses();
@@ -176,7 +176,7 @@
 
             currentAddress = {};
             $('.address-preview').html('');
-            $('#short_name').focus();
+            $('#gmail_address').focus();
         }
 
         function closeEditBox(attr, event = null) {
@@ -612,7 +612,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary copy-format" data-dismiss="modal"
-                            onclick="copyToClipboard(processedAddresses); $('#short_name').focus();">
+                            onclick="copyToClipboard(processedAddresses); $('#gmail_address').focus();">
                             Copear y cerrar
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
