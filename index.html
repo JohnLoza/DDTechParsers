@@ -310,17 +310,12 @@
         function refineAddressData(obj) {
             Object.getOwnPropertyNames(obj).forEach(attr => {
                 obj[attr] = attr == 'email' ? obj[attr].toLowerCase() : obj[attr].toUpperCase();
-            });
-
-            const attrs = Object.getOwnPropertyNames(obj);
-            attrs.forEach(attr => {
-                if (attr != 'email')
-                    obj[attr] = obj[attr].replace(/[:\.+,"'|()°\/\\]/g, '');
                 obj[attr] = obj[attr].trim();
+                if (attr != 'email')
+                    obj[attr] = obj[attr].replace(/[+|°\/\\]/g, '');
             });
 
-            if (!obj.businessName)
-                obj.businessName = obj.client; // Set businessName if not present
+            obj.businessName = obj.client; // Set businessName if not present
 
             if (obj.client.length > 30)
                 obj.client = obj.client.substring(0, 29); // Cut down the name to 30 chars
@@ -342,7 +337,7 @@
                         cutTo -= 1;
                 }
 
-                obj.street2 = obj.street.substring(cutTo, 999); // Complete street #2 with chars beyond limit in street #1
+                obj.street2 = obj.street.substring(cutTo, 999).trim(); // Complete street #2 with chars beyond limit in street #1
                 obj.street = obj.street.substring(0, cutTo); // Limit street #1 chars to no more than 30 chars
             }
 
