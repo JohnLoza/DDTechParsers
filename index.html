@@ -310,7 +310,8 @@
         function refineAddressData(obj) {
             Object.getOwnPropertyNames(obj).forEach(attr => {
                 obj[attr] = attr == 'email' ? obj[attr].toLowerCase() : obj[attr].toUpperCase();
-                obj[attr] = obj[attr].trim();
+                obj[attr] = obj[attr].normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "").trim(); // remove accents/diacritics
                 if (attr != 'email')
                     obj[attr] = obj[attr].replace(/[+|°\/\\]/g, '');
             });
