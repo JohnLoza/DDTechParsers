@@ -313,7 +313,7 @@
                 obj[attr] = obj[attr].normalize("NFD")
                     .replace(/[\u0300-\u036f]/g, "").trim(); // remove accents/diacritics
                 if (attr != 'email')
-                    obj[attr] = obj[attr].replace(/[+|°\/\\]/g, '');
+                    obj[attr] = obj[attr].replace(/[+|°()\/\\]/g, '');
             });
 
             obj.businessName = obj.client; // Set businessName if not present
