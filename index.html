@@ -64,10 +64,6 @@
         });
 
         function addAddress() {
-            if (Object.getOwnPropertyNames(addresses).length == 10) {
-                bootstrapAlert({ msg: 'Se llegó al límite de domicilios por procesar', type: 'warning' }); return;
-            }
-
             const errors = validateData(currentAddress);
             if (errors.length > 0) {
                 console.log('got some errors', errors);
