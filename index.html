@@ -185,7 +185,7 @@
         }
 
         function completeObjFromGmailAddress(obj, addressData) {
-            obj.shortName = addressData.match(/ido: #[\d]+/g)[0].replace('ido: #', '');
+            obj.shortName = addressData.match(/ión del cliente\n\n[\d]+/g)[0].replace('ión del cliente\n\n', '');
 
             obj.client = addressData.match(/Cliente(.)+\n/g)[0].replace('Cliente ', '').replace('\n', '');
             obj.email = addressData.match(/Email(.)+\n/g)[0].replace('Email ', '').replace('\n', '');
