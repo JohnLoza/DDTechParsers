@@ -158,6 +158,34 @@
             document.documentElement.scrollTop = 0;
         }
 
+        function buildPreview() {
+            let preview = `<h5><strong>Información del cliente</strong></h5>`;
+            let lineBreaks, maxlength;
+
+            currentAddressAttrs().forEach(attr => {
+                if (attr == 'number')
+                    return; // skip number
+
+                lineBreaks = ['email', 'state'].includes(attr) ? '<br><br>' : '<br>';
+                maxlength = ['businessName', 'colony'].includes(attr) ? 50 : 30;
+
+                preview += `
+                    <div>
+                        <strong class="preview-label" onclick="editCurrentAddressAttr('${attr}', ${maxlength})">
+                            ${translatedAttrs()[attr]}:
+                        </strong>
+                        <span class="address-${attr}-preview preview-label"
+                            onclick="editCurrentAddressAttr('${attr}', ${maxlength})">
+                            ${currentAddress[attr]}
+                        </span>${lineBreaks}
+                        <span class="address-${attr}-edit-box"></span>
+                    </div>
+                `;
+            });
+
+            return preview;
+        }
+
         function cleanAddresses() {
             addresses = {};
             updateLocalStorageAddresses();
@@ -431,40 +459,11 @@
             refreshCurrentAddress();
 
             const previewHolder = $('.address-preview');
-            let preview = `<h5><strong>Información del cliente</strong></h5>`;
-            let lineBreaks;
-            let maxlength;
-
-            currentAddressAttrs().forEach(attr => {
-                if (attr == 'number')
-                    return; // skip number
-
-                lineBreaks = attr == 'email' ? '<br><br>' : '<br>';
-                maxlength = ['businessName', 'colony'].includes(attr) ? 50 : 30;
-
-                preview += `
-                    <div>
-                        <strong class="preview-label" onclick="editCurrentAddressAttr('${attr}', ${maxlength})">
-                            ${translatedAttrs()[attr]}:
-                        </strong>
-                        <span class="address-${attr}-preview preview-label"
-                            onclick="editCurrentAddressAttr('${attr}', ${maxlength})">
-                            ${currentAddress[attr]}
-                        </span>${lineBreaks}
-                        <span class="address-${attr}-edit-box"></span>
-                    </div>
-                `;
-            });
+            let preview = buildPreview();
 
             previewHolder.html(preview);
-            if(currentAddress['additionalInfo'])
-                previewHolder.append(`
-                    <br>
-                    <div class="additional-info">
-                        <strong>Información Adicional:</strong>
-                        <span>${currentAddress['additionalInfo']}</span>
-                    </div>
-                `);
+            if(currentAddress['additionalInfo'] && currentAddress['additionalInfo'] != 'sin informacion')
+                previewHolder.append(`<div class="additional-info">${currentAddress['additionalInfo']}</div>`);
 
             validateData(currentAddress);
         }
