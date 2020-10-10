@@ -14,7 +14,17 @@
 
     <style>
         body { font-family: 'Roboto', sans-serif; }
+        .additional-info {
+            background-color: #17a2b8;
+            border-radius: 5px;
+            color: #fefefe;
+            padding: 3px 7px;
+        }
         .card { background-color: rgba(255, 255, 255, 0.9) }
+        .nav-item.active {
+            border: 1px solid #fefefe;
+            border-radius: 5px;
+        }
         .preview-error {
             color: #fefefe;
             background-color: red;
@@ -25,10 +35,6 @@
             height: 250px;
         }
         .text-light { color: #fefefe; }
-        .nav-item.active {
-            border: 1px solid #fefefe;
-            border-radius: 5px;
-        }
     </style>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -202,8 +208,8 @@
                 .replace(/Ciudad(.)+\n[\s>]*Estado[\s]+/g, '').replace('\n', '');
 
             obj.number = lastMatch(addressData, /Número(.)+\n/g).replace('Número ', '').replace('\n', '');
-
             obj.street = lastMatch(addressData, /Calle(.)+\n/g).replace('Calle ', '').replace('\n', '');
+            obj.additionalInfo = addressData.match(/Información adicional(.)+\n/g)[0].replace('Información adicional ', '');
 
             return obj;
         }
@@ -305,7 +311,7 @@
 
         function refineAddressData(obj) {
             Object.getOwnPropertyNames(obj).forEach(attr => {
-                obj[attr] = attr == 'email' ? obj[attr].toLowerCase() : obj[attr].toUpperCase();
+                obj[attr] = ['email', 'additionalInfo'].includes(attr) ? obj[attr].toLowerCase() : obj[attr].toUpperCase();
                 obj[attr] = obj[attr].normalize("NFD")
                     .replace(/[\u0300-\u036f]/g, "").trim(); // remove accents/diacritics
                 if (attr != 'email')
@@ -451,6 +457,14 @@
             });
 
             previewHolder.html(preview);
+            if(currentAddress['additionalInfo'])
+                previewHolder.append(`
+                    <br>
+                    <div class="additional-info">
+                        <strong>Información Adicional:</strong>
+                        <span>${currentAddress['additionalInfo']}</span>
+                    </div>
+                `);
 
             validateData(currentAddress);
         }
