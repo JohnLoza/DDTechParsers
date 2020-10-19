@@ -362,6 +362,8 @@
                 obj[attr] = attr == 'email' ? obj[attr].toLowerCase() : obj[attr].toUpperCase();
             });
 
+            obj.total = obj.total.replace('$', '');
+
             if (obj.parcel.includes('GUADALAJARA'))
                 obj.parcel = obj.destination.includes('JALISCO') ? 'ZMG' : 'ESTAFETA';
             else if (obj.parcel.includes('GRATIS') || obj.parcel.includes('AÉREO'))
