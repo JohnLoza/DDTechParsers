@@ -71,6 +71,17 @@
                     orderToHtml(orders[orderKey], orderKey)
                 );
             });
+
+            // submit form on enter
+            $("[data-submit-on-enter]").on("keydown", function(event) {
+                if (event.keyCode === 13) {
+                if (event.shiftKey)
+                    return;
+                event.preventDefault();
+                $('.add-btn').click();
+                }
+            });
+            // submit form on enter
         });
 
         function addOrder() {
@@ -588,7 +599,8 @@
                         <div class="form-group">
                             <label for="processor" class="sr-only">Procesó</label>
                             <input type="text" list="processors" name="processor" id="processor" class="form-control"
-                                onkeyup="updateCurrentOrderAttr(this, 'processor')" placeholder="* Procesó">
+                                onkeyup="updateCurrentOrderAttr(this, 'processor')" placeholder="* Procesó" 
+                                data-submit-on-enter='true'>
                             <datalist id="processors">
                                 <option value="ADRIAN"/>
                                 <option value="ALEXIS"/>
@@ -617,13 +629,15 @@
                         <div class="form-group">
                             <label for="date" class="sr-only">Fecha</label>
                             <input type="text" name="date" id="date" class="form-control"
-                                onkeyup="updateCurrentOrderAttr(this, 'date')" placeholder="* Fecha">
+                                onkeyup="updateCurrentOrderAttr(this, 'date')" placeholder="* Fecha" 
+                                data-submit-on-enter='true'>
                         </div>
 
                         <div class="form-group">
                             <label for="bank" class="sr-only">Banco</label>
                             <input type="text" list="banks" name="bank" id="bank" class="form-control"
-                                onkeyup="updateCurrentOrderAttr(this, 'bank')" placeholder="* Banco">
+                                onkeyup="updateCurrentOrderAttr(this, 'bank')" placeholder="* Banco" 
+                                data-submit-on-enter='true'>
                             <datalist id="banks">
                                 <option value="BC"/>
                                 <option value="BCE"/>
@@ -640,7 +654,8 @@
                         <div class="form-group">
                             <label for="payment_type" class="sr-only">Forma de pago</label>
                             <input type="text" list="payment_types" name="payment_type" id="payment_type" class="form-control"
-                                onkeyup="updateCurrentOrderAttr(this, 'paymentType')" placeholder="Forma de pago (opcional)">
+                                onkeyup="updateCurrentOrderAttr(this, 'paymentType')" placeholder="Forma de pago (opcional)" 
+                                data-submit-on-enter='true'>
                             <datalist id="payment_types">
                                 <option value="DEP EFEC"/>
                                 <option value="PAG OF"/>
@@ -652,13 +667,15 @@
                         <div class="form-group">
                             <label for="movement" class="sr-only">Movimiento</label>
                             <input type="text" name="movement" id="movement" class="form-control"
-                                onkeyup="updateCurrentOrderAttr(this, 'movement')" placeholder="Movimiento (opcional)">
+                                onkeyup="updateCurrentOrderAttr(this, 'movement')" placeholder="Movimiento (opcional)" 
+                                data-submit-on-enter='true'>
                         </div>
 
                         <div class="form-group">
                             <label for="type" class="sr-only">Tipo</label>
                             <input type="text" list="types" name="type" id="type" class="form-control"
-                                onkeyup="updateCurrentOrderAttr(this, 'type')" placeholder="Tipo (opcional)">
+                                onkeyup="updateCurrentOrderAttr(this, 'type')" placeholder="Tipo (opcional)"
+                                data-submit-on-enter='true'>
                             <datalist id="types">
                                 <option value="D/S"/>
                                 <option value="30K"/>
@@ -671,7 +688,8 @@
                         <div class="form-group">
                             <label for="guide" class="sr-only">Guía</label>
                             <input type="text" name="guide" id="guide" class="form-control"
-                                onkeyup="updateCurrentOrderAttr(this, 'guide')" placeholder="Guía (opcional)">
+                                onkeyup="updateCurrentOrderAttr(this, 'guide')" placeholder="Guía (opcional)" 
+                                data-submit-on-enter='true'>
                         </div>
                     </section>
 
@@ -685,7 +703,7 @@
             <!-- Card body end -->
 
             <div class="card-footer">
-                <button class="btn btn-primary mr-3" onclick="addOrder()">Agregar</button>
+                <button class="add-btn btn btn-primary mr-3" onclick="addOrder()">Agregar</button>
                 <button class="btn btn-success mr-3" onclick="processOrders()">Generar formato</button>
                 <button class="btn btn-info mr-3" onclick="$('#ddtech-modal').modal('show')">Último Procesado</button>
                 <button class="btn btn-secondary mr-3" onclick="cleanFields()">Limpiar</button>
