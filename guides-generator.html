@@ -71,7 +71,7 @@
             guides[id] = guide;
             updateLocalStorageGuides();
 
-            $('.guides-container').append(guideToHtml(guide, id));
+            $('.guides-container').prepend(guideToHtml(guide, id));
 
             const msg = `
                 La guía para <strong>${guide.destShortName}</strong>

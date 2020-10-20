@@ -80,7 +80,7 @@
             addresses[addressKey] = currentAddress;
             updateLocalStorageAddresses();
 
-            $('.addresses-container').append(addressToHtml(currentAddress, addressKey));
+            $('.addresses-container').prepend(addressToHtml(currentAddress, addressKey));
 
             const msg = `
                 El domicilio <strong>${currentAddress.shortName}</strong>

@@ -85,10 +85,6 @@
         });
 
         function addOrder() {
-            if (ordersPropertyNames().length == 10) {
-                bootstrapAlert({ msg: 'Se llegó al límite de ordenes por procesar', type: 'warning' }); return;
-            }
-
             const errors = validateData(currentOrder);
             if (errors.length > 0) {
                 console.log('got some errors', errors);
@@ -99,7 +95,7 @@
             orders[orderKey] = currentOrder;
             updateLocalStorageOrders();
 
-            $('.orders-container').append(orderToHtml(currentOrder, orderKey));
+            $('.orders-container').prepend(orderToHtml(currentOrder, orderKey));
 
             const msg = `
                 La orden <strong>${currentOrder.orderId}</strong>
@@ -110,7 +106,7 @@
             updateOrdersCount();
             $('#gmail_order').focus();
 
-            if (ordersPropertyNames().length == 10)
+            if (ordersPropertyNames().length == 99)
                 processOrders();
         }
 
@@ -642,12 +638,11 @@
                                 <option value="BC"/>
                                 <option value="BCE"/>
                                 <option value="BT"/>
-                                <option value="BVE"/>
-                                <option value="DEBEMOS"/>
-                                <option value="GARANTIA"/>
+                                <option value="ST"/>
                                 <option value="MP"/>
                                 <option value="PAYPAL"/>
-                                <option value="ST"/>
+                                <option value="DEBEMOS"/>
+                                <option value="GARANTIA"/>
                             </datalist>
                         </div>
 
@@ -658,9 +653,8 @@
                                 data-submit-on-enter='true'>
                             <datalist id="payment_types">
                                 <option value="DEP EFEC"/>
-                                <option value="PAG OF"/>
-                                <option value="ST"/>
                                 <option value="TRANSF"/>
+                                <option value="PAG OF"/>
                             </datalist>
                         </div>
 
