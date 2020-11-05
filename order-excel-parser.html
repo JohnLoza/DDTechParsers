@@ -85,6 +85,7 @@
         });
 
         function addOrder() {
+            refreshCurrentOrder();
             const errors = validateData(currentOrder);
             if (errors.length > 0) {
                 console.log('got some errors', errors);
@@ -253,7 +254,7 @@
                 </div>
             `);
 
-            $('#update_attr_' + attr).focus().select();
+            $('#update_attr_' + attr).focus();
         }
 
         function generateHashId() {
@@ -535,7 +536,6 @@
 </head>
 
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <a class="navbar-brand" href="https://johnloza.github.io/DDTechParsers/">
             DD TECH Address Generator
@@ -598,27 +598,19 @@
                                 onkeyup="updateCurrentOrderAttr(this, 'processor')" placeholder="* Procesó" 
                                 data-submit-on-enter='true'>
                             <datalist id="processors">
-                                <option value="ADRIAN"/>
                                 <option value="ALEXIS"/>
                                 <option value="ALE CZNRZ"/>
-                                <option value="ALEX PATRON"/>
                                 <option value="BRENDA"/>
-                                <option value="CHRISTIAN"/>
                                 <option value="CYNTHIA"/>
                                 <option value="ALEXIS"/>
-                                <option value="EDDY"/>
                                 <option value="ERICK"/>
                                 <option value="FANNY"/>
-                                <option value="FAUSTO"/>
-                                <option value="GARCIA"/>
                                 <option value="GRIS"/>
                                 <option value="JESSY"/>
                                 <option value="JOHNNY"/>
                                 <option value="MAYE"/>
                                 <option value="MIRY"/>
-                                <option value="OSWALDO"/>
-                                <option value="RAMON"/>
-                                <option value="STEPHANIE"/>
+                                <option value="LILIA"/>
                             </datalist>
                         </div>
 
