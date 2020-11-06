@@ -85,7 +85,6 @@
         });
 
         function addOrder() {
-            refreshCurrentOrder();
             const errors = validateData(currentOrder);
             if (errors.length > 0) {
                 console.log('got some errors', errors);
