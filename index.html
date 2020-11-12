@@ -219,25 +219,25 @@
         }
 
         function completeObjFromGmailAddress(obj, addressData) {
-            obj.shortName = addressData.match(/ión del cliente\n\n[\d]+/g)[0].replace('ión del cliente\n\n', '');
+            obj.shortName = addressData.match(/Pedido: #[\d]+/g)[0].replace('Pedido: #', '');
 
-            obj.client = addressData.match(/Cliente(.)+\n/g)[0].replace('Cliente ', '').replace('\n', '');
-            obj.email = addressData.match(/Email(.)+\n/g)[0].replace('Email ', '').replace('\n', '');
+            obj.client = addressData.match(/Cliente(.)*\n/g)[0].replace('Cliente ', '').replace('\n', '');
+            obj.email = addressData.match(/Email(.)*\n/g)[0].replace('Email ', '').replace('\n', '');
 
             obj.tel1 = addressData.match(/Teléfono[0-9()-\s]+/g)[0].replace('Teléfono', '').replace('\n', '');
             let tel2Match = addressData.match(/Teléfono #2[0-9()-\s]+/g);
             if (tel2Match)
                 obj.tel2 = tel2Match[0].replace('Teléfono #2 ', '').replace('\n', '');
 
-            obj.zc = lastMatch(addressData, /C\.P\.(.)+\n/g).replace('C.P. ', '').replace('\n', '');
-            obj.colony = lastMatch(addressData, /Colonia(.)+\n/g).replace('Colonia ', '').replace('\n', '');
-            obj.city = lastMatch(addressData, /Ciudad(.)+\n/g).replace('Ciudad ', '').replace('\n', '');
-            obj.state = lastMatch(addressData, /Ciudad(.)+\n[\s>]*Estado(.)+/g)
-                .replace(/Ciudad(.)+\n[\s>]*Estado[\s]+/g, '').replace('\n', '');
+            obj.zc = lastMatch(addressData, /C\.P\.(.)*\n/g).replace('C.P. ', '').replace('\n', '');
+            obj.colony = lastMatch(addressData, /Colonia(.)*\n/g).replace('Colonia ', '').replace('\n', '');
+            obj.city = lastMatch(addressData, /Ciudad(.)*\n/g).replace('Ciudad ', '').replace('\n', '');
+            obj.state = lastMatch(addressData, /Ciudad(.)*\n[\s>]*Estado(.)*/g)
+                .replace(/Ciudad(.)*\n[\s>]*Estado[\s]+/g, '').replace('\n', '');
 
-            obj.number = lastMatch(addressData, /Número(.)+\n/g).replace('Número ', '').replace('\n', '');
-            obj.street = lastMatch(addressData, /Calle(.)+\n/g).replace('Calle ', '').replace('\n', '');
-            obj.additionalInfo = addressData.match(/Información adicional(.)+\n/g)[0].replace('Información adicional ', '');
+            obj.number = lastMatch(addressData, /Número(.)*\n/g).replace('Número ', '').replace('\n', '');
+            obj.street = lastMatch(addressData, /Calle(.)*\n/g).replace('Calle ', '').replace('\n', '');
+            obj.additionalInfo = addressData.match(/Información adicional(.)*\n/g)[0].replace('Información adicional ', '');
 
             return obj;
         }

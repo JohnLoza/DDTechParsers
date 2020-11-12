@@ -183,7 +183,7 @@
         }
 
         function completeObjFromGmailOrder(obj, orderData) {
-            obj.orderId = orderData.match(/#[\d]+/g)[0].replace('#', '');
+            obj.orderId = orderData.match(/Pedido: #[\d]+/g)[0].replace('Pedido: #', '');
 
             obj.client = orderData.match(/Cliente(.)+\n/g)[0].replace('Cliente ', '').replace('\n', '');
             obj.email = orderData.match(/Email(.)+\n/g)[0].replace('Email ', '').replace('\n', '');
