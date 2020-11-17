@@ -488,12 +488,16 @@
                 errors.push('Calle #2 excede los 30 caracteres');
                 errorFields.push('street2');
             }
+            if (address.street2 && address.street2.length == 1) {
+                errors.push('Calle #2 debe ser mayor a 1 caracter');
+                errorFields.push('street2');
+            }
             if (address.businessName && address.businessName.length > 50) {
                 errors.push('Razón Social excede los 50 caracteres');
                 errorFields.push('businessName');
             }
-            if (address.colony && address.colony.length > 50) {
-                errors.push('Colonia excede los 30 caracteres');
+            if (address.colony && address.colony.length > 40) {
+                errors.push('Colonia excede los 40 caracteres');
                 errorFields.push('colony');
             }
 
