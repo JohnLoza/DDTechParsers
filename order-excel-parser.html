@@ -10,36 +10,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <style>
-        body { font-family: 'Roboto', sans-serif; }
-        .card { background-color: rgba(255, 255, 255, 0.9) }
-        .preview-label { cursor: pointer; }
-        .processed-orders-container {
-            overflow-y: scroll;
-            height: 250px;
-        }
-        .table { font-size: 0.8em !important; }
-        .text-light { color: #fefefe; }
-        .nav-item.active {
-            border: 1px solid #fefefe;
-            border-radius: 5px;
-        }
-        .order-total-preview {
-            background-color: green;
-            color: #fefefe;
-            padding: 0.3em;
-        }
-        .order-parcel-preview {
-            background-color: #666;
-            color: #fefefe;
-            padding: 0.3em;
-        }
-        .order-parcel-preview.estafeta { background-color: #e53935; }
-        .order-parcel-preview.fedex { background-color: #3949ab; }
-        .order-parcel-preview.zmg { background-color: #7cb342; }
-        .order-parcel-preview.dhl { background-color: #fdd835; }
-    </style>
+    <link rel="stylesheet" href="assets/css/shared.css">
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -724,7 +695,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="processed-orders-container">
+                        <div class="processed-container">
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
