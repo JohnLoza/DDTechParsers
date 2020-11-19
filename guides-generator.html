@@ -25,6 +25,7 @@
     <script src="assets/js/fontawesome/fontawesome.min.js"></script>
     <script src="assets/js/fontawesome/solid.min.js"></script>
 
+    <script src="assets/js/shared.js"></script>
     <script src="assets/js/monitor.js"></script>
 
     <script type="text/javascript">
@@ -41,7 +42,7 @@
                 window.localStorage.setItem('guides', JSON.stringify({}))
 
             guides = JSON.parse(window.localStorage.getItem('guides'));
-            updateGuidesCount()
+            updateCounter(guides);
 
             Object.getOwnPropertyNames(guides).forEach(guideKey => {
                 $('.guides-container').append(
@@ -80,46 +81,11 @@
                 se agregó a la lista de guías por procesar`;
             bootstrapAlert({ msg: msg, icon: 'flag', type: 'success' });
             cleanFields();
-            updateGuidesCount();
+            updateCounter(guides);
             $('#dest_short_name').focus();
 
             if (Object.getOwnPropertyNames(guides).length == 10)
                 processGuides();
-        }
-
-        function bootstrapAlert(args = {}) {
-            const alertId = generateHashId();
-            const defaultArgs = {
-                icon: 'info',
-                type: 'info',
-                dismissDelay: 30000
-            }
-            args = { ...defaultArgs, ...args }; // merge options
-
-            if (args.errors) {
-                args.msg = 'Ooppss! <ul>';
-                args.errors.forEach(error => {
-                    args.msg += `<li>${error}</li>`;
-                });
-                args.msg += '</ul>'
-            }
-
-            $('.alert').alert('close'); // remove old alerts
-
-            $('.alerts-container').append(`
-            <div class="alert alert-${args.type} alert-dismissible fade show alert-${alertId}" role="alert">
-                <i class="fas fa-${args.icon} mr-2"></i> ${args.msg}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            `);
-
-            setTimeout(function () {
-                $(`.alert-${alertId}`).alert('close');
-            }, args.dismissDelay);
-
-            document.documentElement.scrollTop = 0;
         }
 
         function cleanAll() {
@@ -142,25 +108,7 @@
             guides = {};
             updateLocalStorageGuides();
             $('.guides-container').html('');
-            updateGuidesCount();
-        }
-
-        function copyToClipboard(text) {
-            var textArea = document.createElement("textarea");
-            $('#ddtech-modal').append(textArea);
-            textArea.value = text;
-
-            textArea.select();
-            textArea.setSelectionRange(0, 99999);
-
-            document.execCommand("copy");
-            $(textArea).remove();
-
-            alert('Copeado al portapapeles!');
-        }
-
-        function generateHashId() {
-            return Math.random().toString(36).replace('0.', '');
+            updateCounter(guides);
         }
 
         function getCurrentGuide() {
@@ -223,7 +171,7 @@
             updateLocalStorageGuides();
 
             $('.guide-' + guideKey).remove();
-            updateGuidesCount();
+            updateCounter(guides);
 
             msg = `
                 Se eliminó la dirección ${lastGuideRemoved.destShortName}
@@ -260,10 +208,6 @@
 
         function updateLocalStorageGuides() {
             window.localStorage.setItem('guides', JSON.stringify(guides));
-        }
-
-        function updateGuidesCount() {
-            $('.guides-count').html(Object.getOwnPropertyNames(guides).length);
         }
 
         function validateGuide(guide) {
@@ -333,7 +277,7 @@
             <div class="card-header">
                 <h3 class="text-center card-title">
                     Generador de Guías para ESTAFETA
-                    <small><span class="guides-count badge badge-primary">0</span></small>
+                    <small><span class="counter badge badge-primary">0</span></small>
                 </h3>
             </div>
 
@@ -403,7 +347,7 @@
             <div class="card-header">
                 <h3 class="text-center card-title">
                     Guías por procesar
-                    <small><span class="guides-count badge badge-primary">0</span></small>
+                    <small><span class="counter badge badge-primary">0</span></small>
                 </h3>
             </div>
 

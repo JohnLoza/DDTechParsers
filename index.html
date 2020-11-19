@@ -25,6 +25,7 @@
     <script src="assets/js/fontawesome/fontawesome.min.js"></script>
     <script src="assets/js/fontawesome/solid.min.js"></script>
 
+    <script src="assets/js/shared.js"></script>
     <script src="assets/js/monitor.js"></script>
 
     <script type="text/javascript">
@@ -40,7 +41,7 @@
                 window.localStorage.setItem('addresses', JSON.stringify({}))
 
             addresses = JSON.parse(window.localStorage.getItem('addresses'));
-            updateAddressesCount();
+            updateCounter(addresses);
 
             Object.getOwnPropertyNames(addresses).forEach(addressKey => {
                 $('.addresses-container').append(
@@ -68,7 +69,7 @@
                 se agregó a la lista de direcciones por procesar`;
             bootstrapAlert({ msg: msg, icon: 'flag', type: 'success' });
             cleanFields();
-            updateAddressesCount();
+            updateCounter(addresses);
             $('#gmail_address').focus();
 
             if (Object.getOwnPropertyNames(addresses).length == 99)
@@ -105,41 +106,6 @@
             return addressInTextFormat;
         }
 
-        function bootstrapAlert(args = {}) {
-            const alertId = generateHashId();
-            const defaultArgs = {
-                icon: 'info',
-                type: 'info',
-                dismissDelay: 30000
-            }
-            args = { ...defaultArgs, ...args }; // merge options
-
-            if (args.errors) {
-                args.msg = 'Ooppss! <ul>';
-                args.errors.forEach(error => {
-                    args.msg += `<li>${error}</li>`;
-                });
-                args.msg += '</ul>'
-            }
-
-            $('.alert').alert('close'); // remove old alerts
-
-            $('.alerts-container').append(`
-            <div class="alert alert-${args.type} alert-dismissible fade show alert-${alertId}" role="alert">
-                <i class="fas fa-${args.icon} mr-2"></i> ${args.msg}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            `);
-
-            setTimeout(function () {
-                $(`.alert-${alertId}`).alert('close');
-            }, args.dismissDelay);
-
-            document.documentElement.scrollTop = 0;
-        }
-
         function buildPreview() {
             let preview = `<h5><strong>Información del cliente</strong></h5>`;
             let lineBreaks, maxlength;
@@ -172,7 +138,7 @@
             addresses = {};
             updateLocalStorageAddresses();
             $('.addresses-container').html('');
-            updateAddressesCount();
+            updateCounter(addresses);
         }
 
         function cleanAll() {
@@ -224,25 +190,6 @@
             return obj;
         }
 
-        function copyToClipboard(text) {
-            var textArea = document.createElement("textarea");
-            $('#ddtech-modal').append(textArea);
-            textArea.value = text;
-
-            textArea.select();
-            textArea.setSelectionRange(0, 99999);
-
-            document.execCommand("copy");
-            $(textArea).remove();
-
-            const options = {
-                msg: 'Se han procesado las direcciones y fueron copiadas al portapapeles',
-                icon: 'flag',
-                type: 'primary'
-            }
-            bootstrapAlert(options);
-        }
-
         function currentAddressAttrs() {
             return [
                 'shortName',
@@ -280,22 +227,12 @@
             $('#update_attr_' + attr).focus();
         }
 
-        function generateHashId() {
-            return Math.random().toString(36).replace('0.', '');
-        }
-
         function highlightErrorFields(errorFields) {
             $('.preview-error').removeClass('preview-error');
 
             errorFields.forEach(field => {
-                $(`.address-${field}-preview`).addClass('preview-error');
+                $(`.address-${field}-preview`).parent().addClass('preview-error');
             });
-        }
-
-        function lastMatch(data, regex) {
-            let match = [];
-            match = data.match(regex);
-            return match[match.length - 1];
         }
 
         function processAddresses() {
@@ -387,7 +324,7 @@
             updateLocalStorageAddresses();
 
             $('.address-' + addressKey).remove();
-            updateAddressesCount();
+            updateCounter(addresses);
 
             msg = `
                 Se eliminó la dirección ${lastAddressRemoved.shortName}
@@ -422,10 +359,6 @@
                 'city': 'Ciudad',
                 'state': 'Estado'
             };
-        }
-
-        function updateAddressesCount() {
-            $('.addresses-count').html(Object.getOwnPropertyNames(addresses).length);
         }
 
         function updateCurrentAddressAttr(input, attr) {
@@ -532,7 +465,7 @@
             <div class="card-header">
                 <h3 class="text-center card-title">
                     Generador de Domicilios para ESTAFETA
-                    <small><span class="addresses-count badge badge-primary">0</span></small>
+                    <small><span class="counter badge badge-primary">0</span></small>
                     <a href="#" class="text-secondary" data-toggle="modal" data-target="#monitor-modal">
                         <i class="fas fa-cogs float-right"></i>
                     </a>
@@ -572,7 +505,7 @@
             <div class="card-header">
                 <h3 class="text-center card-title">
                     Domicilios por procesar
-                    <small><span class="addresses-count badge badge-primary">0</span></small>
+                    <small><span class="counter badge badge-primary">0</span></small>
                 </h3>
             </div>
 

@@ -25,6 +25,7 @@
     <script src="assets/js/fontawesome/fontawesome.min.js"></script>
     <script src="assets/js/fontawesome/solid.min.js"></script>
 
+    <script src="assets/js/shared.js"></script>
     <script src="assets/js/monitor.js"></script>
 
     <script type="text/javascript">
@@ -39,7 +40,7 @@
                 window.localStorage.setItem('orders', JSON.stringify({}))
 
             orders = JSON.parse(window.localStorage.getItem('orders'));
-            updateOrdersCount();
+            updateCounter(orders);
 
             Object.getOwnPropertyNames(orders).forEach(orderKey => {
                 $('.orders-container').append(
@@ -78,53 +79,18 @@
                 se agregó a la lista de ordenes por procesar`;
             bootstrapAlert({ msg: msg, icon: 'flag', type: 'success' });
             cleanFields();
-            updateOrdersCount();
+            updateCounter(orders);
             $('#gmail_order').focus();
 
-            if (ordersPropertyNames().length == 99)
+            if (Object.getOwnPropertyNames(orders)().length == 99)
                 processOrders();
-        }
-
-        function bootstrapAlert(args = {}) {
-            const alertId = generateHashId();
-            const defaultArgs = {
-                icon: 'info',
-                type: 'info',
-                dismissDelay: 30000
-            }
-            args = { ...defaultArgs, ...args }; // merge options
-
-            if (args.errors) {
-                args.msg = 'Ooppss! <ul>';
-                args.errors.forEach(error => {
-                    args.msg += `<li>${error}</li>`;
-                });
-                args.msg += '</ul>'
-            }
-
-            $('.alert').alert('close'); // remove old alerts
-
-            $('.alerts-container').append(`
-            <div class="alert alert-${args.type} alert-dismissible fade show alert-${alertId}" role="alert">
-                <i class="fas fa-${args.icon} mr-2"></i> ${args.msg}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            `);
-
-            setTimeout(function () {
-                $(`.alert-${alertId}`).alert('close');
-            }, args.dismissDelay);
-
-            document.documentElement.scrollTop = 0;
         }
 
         function cleanOrders() {
             orders = {};
             updateLocalStorageOrders();
             $('.orders-container').html('');
-            updateOrdersCount();
+            updateCounter(orders);
         }
 
         function cleanAll() {
@@ -231,16 +197,6 @@
             $('#update_attr_' + attr).focus();
         }
 
-        function generateHashId() {
-            return Math.random().toString(36).replace('0.', '');
-        }
-
-        function lastMatch(data, regex) {
-            let match = [];
-            match = data.match(regex);
-            return match[match.length - 1];
-        }
-
         function newOrderObject() {
             return {
                 orderId: '',
@@ -281,10 +237,6 @@
             return obj;
         }
 
-        function ordersPropertyNames(){
-            return Object.getOwnPropertyNames(orders);
-        }
-
         function orderToHtml(order, orderKey) {
             return `
                 <p class="order-${orderKey} border rounded p-2">
@@ -322,7 +274,7 @@
         }
 
         function processOrders() {
-            const orderKeys = ordersPropertyNames();
+            const orderKeys = Object.getOwnPropertyNames(orders);
             if (orderKeys.length == 0){
                 bootstrapAlert({msg: 'No hay domicilios por procesar'});
                 return;
@@ -382,7 +334,7 @@
             updateLocalStorageOrders();
 
             $('.order-' + orderKey).remove();
-            updateOrdersCount();
+            updateCounter(orders);
 
             msg = `
                 Se eliminó la orden ${lastOrderRemoved.shortName}
@@ -419,10 +371,6 @@
                 type: 'Tipo',
                 guide: 'Guía'
             };
-        }
-
-        function updateOrdersCount() {
-            $('.orders-count').html(ordersPropertyNames().length);
         }
 
         function updateCurrentOrderAttr(input, attr) {
@@ -551,7 +499,7 @@
             <div class="card-header">
                 <h3 class="text-center card-title">
                     Transformador de Pedidos a tabla
-                    <small><span class="orders-count badge badge-primary">0</span></small>
+                    <small><span class="counter badge badge-primary">0</span></small>
                     <a href="#" class="text-secondary" data-toggle="modal" data-target="#monitor-modal">
                         <i class="fas fa-cogs float-right"></i>
                     </a>
@@ -670,7 +618,7 @@
             <div class="card-header">
                 <h3 class="text-center card-title">
                     Pedidos por procesar
-                    <small><span class="orders-count badge badge-primary">0</span></small>
+                    <small><span class="counter badge badge-primary">0</span></small>
                 </h3>
             </div>
 
