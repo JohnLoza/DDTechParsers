@@ -10,7 +10,6 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <style>
         body { font-family: 'Roboto', sans-serif; }
@@ -51,6 +50,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+
+    <script src="assets/js/fontawesome/fontawesome.min.js"></script>
+    <script src="assets/js/fontawesome/solid.min.js"></script>
+
+    <script src="assets/js/monitor.js"></script>
 
     <script type="text/javascript">
         let orders = {};
@@ -115,7 +119,7 @@
             const defaultArgs = {
                 icon: 'info',
                 type: 'info',
-                dismissDelay: 15000
+                dismissDelay: 30000
             }
             args = { ...defaultArgs, ...args }; // merge options
 
@@ -131,7 +135,7 @@
 
             $('.alerts-container').append(`
             <div class="alert alert-${args.type} alert-dismissible fade show alert-${alertId}" role="alert">
-                <i class="fa fas fa-${args.icon}"></i> ${args.msg}
+                <i class="fas fa-${args.icon} mr-2"></i> ${args.msg}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -313,8 +317,9 @@
         function orderToHtml(order, orderKey) {
             return `
                 <p class="order-${orderKey} border rounded p-2">
-                    <i class="fa fas fa-times fa-lg mr-5 btn btn-danger remove-item"
-                        onclick="removeOrder('${orderKey}')"></i>
+                    <button type="button" class="btn btn-danger mr-3" onclick="removeOrder('${orderKey}')">
+                        <i class="fas fa-times fa-lg"></i>
+                    </button>
                     <strong>${order.orderId}</strong> | ${order.client} |
                     ${order.processor} | ${order.date} | ${order.bank}
                 </p>
@@ -571,24 +576,25 @@
     <!-- Navbar end -->
 
     <div class="container">
-
-        <div class="alerts-container mt-3"></div>
-
         <div class="card mt-3">
             <div class="card-header">
                 <h3 class="text-center card-title">
                     Transformador de Pedidos a tabla
                     <small><span class="orders-count badge badge-primary">0</span></small>
+                    <a href="#" class="text-secondary" data-toggle="modal" data-target="#monitor-modal">
+                        <i class="fas fa-cogs float-right"></i>
+                    </a>
                 </h3>
             </div>
 
             <div class="card-body">
+                <div class="alerts-container mt-3"></div>
                 <div class="row">
                     <section class="col-lg-6 col-md-12">
                         <div class="form-group">
                             <label for="gmail_order" class="sr-only">Domicilio Gmail</label>
                             <textarea name="gmail_order" id="gmail_order" cols="30" rows="1" class="form-control"
-                                onchange="updatePreview()" placeholder="* Domicilio Gmail"></textarea>
+                                onchange="updatePreview()" placeholder="* Domicilio Gmail" data-monitor-feed=true></textarea>
                         </div>
 
                         <div class="form-group">
@@ -751,6 +757,30 @@
                         <button type="button" class="btn btn-primary copy-format" data-dismiss="modal"
                             onclick="copyElementContents('processed_orders'); $('#gmail_order').focus();">
                             Copear y cerrar
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="monitor-modal" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-light">
+                        <h5 class="modal-title">Configuración del monitor</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                            onclick="setMonitorValues();">
+                            Guardar
+                        </button>
+                        <button type="button" class="btn btn-info" onclick="appendField();">
+                            Añadir campo
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     </div>
