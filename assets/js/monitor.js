@@ -47,7 +47,7 @@ function updateConfigurationModal() {
     values.forEach(val => {
         appendField(val);
     });
-    
+
     if (values.length == 0)
         appendField();
 }
@@ -59,7 +59,7 @@ function appendField(value = '') {
                 <input type="text" value="${value}" class="form-control monitor-value"/>
             </div>
             <div class="col-2">
-                <a href="#" class="text-danger" onclick="$(this).closest('.row').remove();">
+                <a href="#" tabindex="-1" class="text-danger" onclick="$(this).closest('.row').remove();">
                     <i class="fa fas fa-times fa-2x"></i>
                 </a>
             </div>
