@@ -96,14 +96,15 @@
         function cleanAll() {
             cleanFields();
             cleanOrders();
+
+            $('#processor').val('');
+            $('#date').val('');
+            $('#bank').val('');
         }
 
         function cleanFields() {
             $('#gmail_order').val('');
-            $('#processor').val('');
             $('#payment_type').val('');
-            $('#date').val('');
-            $('#bank').val('');
             $('#movement').val('');
             $('#type').val('');
             $('#guide').val('');
